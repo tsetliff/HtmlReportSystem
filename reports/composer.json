@@ -1,0 +1,13 @@
+{
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.zendframework.com/"
+        }
+    ],
+    "require": {
+        "zendframework/zend-authentication": "2.0.*",
+        "zendframework/zend-db": "2.0.*",
+        "zendframework/zend-loader": "2.0.*"
+    }
+}

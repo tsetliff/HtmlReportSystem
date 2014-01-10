@@ -1,0 +1,31 @@
+Right now this is very Alpha so here are the steps to set it up:
+
+Install CentOS 6.4 or greater to be the report server.
+
+Personally I installed the minimal iso, set up networking, ran updates with:
+  yum update
+
+yum install httpd php mod_ssl php-mysql mysql mysql-server
+Install your favorite editor.  For me I just used:
+yum install vim-enhanced
+chkconfig httpd on
+chkconfig mysqld on
+service httpd start
+service mysqld start
+
+Load the schema.sql file into mysql.  Since this is designed for a dedicated server right now it will
+create the database as well.
+mysql -u root < schema.sql
+
+For minimal configuration install the contents of the reports directory into /var/www/html
+And the resources directory (not just it's contents) to /var/www/
+
+Change the ownership of the resources directory to apache:
+
+chown -R apache:apache /var/www/resources
+
+Run composer to pull down the other packages
+cd /var/www/html
+./composer.phar install
+
+Edit the configure.php file in the project to set up your data sources.
