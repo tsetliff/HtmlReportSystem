@@ -17,8 +17,8 @@ Load the schema.sql file into mysql.  Since this is designed for a dedicated ser
 create the database as well.
 mysql -u root < schema.sql
 
-For minimal configuration install the contents of the reports directory into /var/www/html
-And the resources directory (not just it's contents) to /var/www/
+For minimal configuration copy all of this to /var/www/html
+And move the resources directory to /var/www/
 
 Change the ownership of the resources directory to apache:
 

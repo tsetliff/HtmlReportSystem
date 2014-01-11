@@ -10,4 +10,13 @@
         "zendframework/zend-db": "2.0.*",
         "zendframework/zend-loader": "2.0.*"
     }
+//    "type": "file",
+//    "file": {
+//        "name": "jquery/jquery",
+//        "version": "1.7.2",
+//        "dist": {
+//            "url": "http://code.jquery.com/jquery-1.7.2.js",
+//            "type": "js"
+//        }
+//    }
 }

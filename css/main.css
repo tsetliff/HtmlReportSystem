@@ -1,0 +1,27 @@
+.resource_manager .resource_tree {
+    display: block;
+    width: 50%;
+    border: 1px solid #999;
+    margin: 5px;
+    padding: 5px;
+}
+
+.file_name {
+    display: block;
+    float: left;
+    width: 250px;
+    /* for debug: border: solid 1px #0F0; */
+}
+
+.file_tools {
+    display: block;
+    float: left;
+    width: 100px;
+    /* for debug: border: solid 1px #0F0; */
+}
+
+.icon {
+    display: block;
+    float: left;
+    width: 20px;
+}

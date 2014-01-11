@@ -8,7 +8,9 @@ require_once("library/includes.php");
 
 define('INSTALL_LOCATION', '/var/www/html');
 define('WEB_ROOT', 'https://192.168.1.13/');
-define('RESOURCE_LOCATION', INSTALL_LOCATION . '/resources');
+
+// The resources path will need to be writable by your web server
+define('RESOURCE_LOCATION', '/var/www/resources');
 
 /**
  * Data Sources
