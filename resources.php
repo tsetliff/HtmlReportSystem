@@ -5,8 +5,31 @@ if (!isset($_REQUEST['action'])) {
     displayBranchInformationForJQueryFileTree();
 } else if ($_REQUEST['action'] == 'upload') {
     uploadFiles();
+} else if ($_REQUEST['action'] == 'delete') {
+    deleteFile($_REQUEST['file']);
 } else {
     error_log("Called with unknown action.");
+}
+
+function deleteFile($filename)
+{
+    $filePath = RESOURCE_LOCATION . $filename;
+    assertFileIsInResources($filePath);
+    unlink($filePath);
+}
+
+/**
+ * Generally checks for trickery.
+ * By just making sure they are the same we know there wern't any funny characters.
+ *
+ * @param $filename
+ */
+function assertFileIsInResources($filename)
+{
+    if (!$filename == realpath($filename)) {
+        error_log("The real path of $filename didn't match, check for file trickery.");
+        exit;
+    }
 }
 
 function uploadFiles()
@@ -16,9 +39,7 @@ function uploadFiles()
     $uploadToResourceDirectory = $_REQUEST['location'];
     $options = array();
     $options['upload_dir'] = RESOURCE_LOCATION . $uploadToResourceDirectory;
-    error_log($options['upload_dir']);
     $upload_handler = new UploadHandler($options);
-
 }
 
 function displayBranchInformationForJQueryFileTree() {
@@ -64,7 +85,7 @@ function displayBranchInformationForJQueryFileTree() {
                         <li style=\"clear: both\">
                             <div class=\"file ext_$ext icon\">&nbsp;</div>
                             <div class=\"file_name\"><a href=\"#\" rel=\"" . htmlentities($dir . $file) . "\">" . htmlentities($file) . "</a></div>
-                            <div class=\"file_tools\">Tools go here</div>
+                            <div class=\"file_tools\"></div>
                         </li>";
                 }
             }
