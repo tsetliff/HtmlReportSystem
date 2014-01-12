@@ -119,7 +119,13 @@ require_once("config.php");
             folder.trigger('click');
             folder.trigger('click');
         } else {
-            alert('top level!');
+            $treeRoot = $('#'+ tgt).closest('.resource_tree');
+            // Having to maintain a list isn't great
+            // There should be soem other way the div id is regestered to the directory settings.
+            // or, it would be cool if the tree code itself had a refresh option.
+            if ($treeRoot.attr('id') == 'report_tree') {
+                displayResourceTree('report_tree', '/Reports/');
+            }
         }
     }
 </script>

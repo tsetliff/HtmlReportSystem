@@ -15,7 +15,7 @@
 
 .file_tools {
     display: block;
-    float: left;
+    float: right;
     width: 100px;
     /* for debug: border: solid 1px #0F0; */
 }
