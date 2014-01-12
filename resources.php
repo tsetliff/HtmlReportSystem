@@ -3,19 +3,50 @@ require_once("config.php");
 
 if (!isset($_REQUEST['action'])) {
     displayBranchInformationForJQueryFileTree();
-} else if ($_REQUEST['action'] == 'upload') {
+    exit;
+}
+$action = $_REQUEST['action'];
+if ($action == 'upload') {
     uploadFiles();
-} else if ($_REQUEST['action'] == 'delete') {
-    deleteFile($_REQUEST['file']);
+} else if ($action == 'delete') {
+    deleteResorce($_REQUEST['file']);
+} else if ($action == 'addReport') {
+    newReport($_REQUEST['name']);
 } else {
-    error_log("Called with unknown action.");
+    error_log("Called with unknown action $action.");
 }
 
-function deleteFile($filename)
+function newReport($name)
+{
+    // Sanitize name
+    $sanitizedName = preg_replace('/[^a-zA-Z0-9 ]/', '', $name);
+    if ($name !== $sanitizedName) {
+        echo("Report may have had invalid characters.  Currently only alpha numeric characters and spaces are allowed.\n");
+    }
+
+    $newDirectory = RESOURCE_LOCATION . '/Reports/' . $sanitizedName;
+
+    if (file_exists($newDirectory)) {
+        echo("That name is already in use.  Please choose another.\n");
+    }
+
+    error_log($newDirectory);
+    mkdir($newDirectory);
+
+    if (!file_exists($newDirectory)) {
+        echo("Error creating directory.  Ask your systems administrator to check the log files.\n");
+    }
+}
+
+function deleteResorce($filename)
 {
     $filePath = RESOURCE_LOCATION . $filename;
     assertFileIsInResources($filePath);
-    unlink($filePath);
+    if (is_dir($filePath)) {
+        rmdir($filePath);
+    } else {
+        unlink($filePath);
+    }
 }
 
 /**
@@ -72,7 +103,14 @@ function displayBranchInformationForJQueryFileTree() {
             // All dirs
             foreach( $files as $file ) {
                 if( file_exists(RESOURCE_LOCATION . $dir . $file) && $file != '.' && $file != '..' && is_dir(RESOURCE_LOCATION . $dir . $file) ) {
-                    echo "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . htmlentities($dir . $file) . "/\">" . htmlentities($file) . "</a></li>";
+                    $reportDirectoryTools = ($dir == '/Reports/') ? '<div class="report_directory_tools"></div>' : '';
+                    echo "
+                        <li class=\"directory collapsed\" style=\"clear: both;\">
+                            <div class=\"directory_icon icon collapsed\">&nbsp;</div>
+                            <a class=\"directory_name\" href=\"#\" rel=\"" . htmlentities($dir . $file) . "/\">" . htmlentities($file) . "</a>
+                            $reportDirectoryTools
+                            <div style=\"clear:both;\"></div>
+                        </li>";
                 }
             }
 
@@ -84,7 +122,9 @@ function displayBranchInformationForJQueryFileTree() {
                     echo "
                         <li style=\"clear: both;\">
                             <div class=\"file ext_$ext icon\">&nbsp;</div>
-                            <div class=\"file_name\"><a href=\"#\" rel=\"" . htmlentities($dir . $file) . "\">" . htmlentities($file) . "</a></div>
+                            <div class=\"file_name\">
+                                <a href=\"#\" rel=\"" . htmlentities($dir . $file) . "\">" . htmlentities($file) . "</a>
+                            </div>
                             <div class=\"file_tools\"></div>
                         </li>";
                 }
@@ -102,11 +142,11 @@ function displayBranchInformationForJQueryFileTree() {
                 echo "
                     <li class=\"uploadFile\" style=\"clear: both;\">
                         <input id=\"fileupload\" class=\"tree_upload\" type=\"file\" name=\"files[]\" data-url=\"resources.php\" multiple>
-                        <script>onBranchExpand('$dir', 'fileTree_$fileTreeId');</script>
                     </li>";
             }
 
             echo "</ul>";
+            echo("<script>onBranchExpand('$dir', 'fileTree_$fileTreeId');</script>");
             echo("<div style=\"clear:both;\"></div>");
         }
     }

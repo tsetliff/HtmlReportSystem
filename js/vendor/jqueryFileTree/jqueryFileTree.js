@@ -64,17 +64,15 @@ if(jQuery) (function($){
 						if( $(this).parent().hasClass('directory') ) {
 							if( $(this).parent().hasClass('collapsed') ) {
 								// Expand
-								if( !o.multiFolder ) {
-									$(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
-									$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
-								}
 								$(this).parent().find('UL').remove(); // cleanup
 								showTree( $(this).parent(), escape($(this).attr('rel').match( /.*\// )) );
 								$(this).parent().removeClass('collapsed').addClass('expanded');
+                                $(this).parent().find('.icon').removeClass('collapsed').addClass('expanded_directory_icon');
 							} else {
 								// Collapse
 								$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
 								$(this).parent().removeClass('expanded').addClass('collapsed');
+                                $(this).parent().find('.icon').removeClass('expanded_directory_icon').addClass('collapsed');
 							}
 						} else {
 							h($(this).attr('rel'));

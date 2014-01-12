@@ -25,11 +25,39 @@ UL.jqueryFileTree A:hover {
 	background: #BDF;
 }
 
+.icon {
+    display: block;
+    float: left;
+    width: 20px;
+}
+
+.file_name {
+    display: block;
+    float: left;
+    width: 250px;
+    /* for debug: border: solid 1px #0F0; */
+}
+
+.directory_name {
+    display: block;
+    float: left;
+    width: 250px;
+    /* for debug: border: solid 1px #0F0; */
+}
+
+.file_tools .report_directory_tools {
+    display: block;
+    float: right;
+    width: 50px;
+    /* for debug: border: solid 1px #0F0; */
+}
+
 /* .uploadFile { background: url(images/code.png) left top no-repeat; } */
 
 /* Core Styles */
-.jqueryFileTree LI.directory { background: url(images/directory.png) left top no-repeat; }
-.jqueryFileTree LI.expanded { background: url(images/folder_open.png) left top no-repeat; }
+.jqueryFileTree DIV.directory_icon { background: url(images/directory.png) left top no-repeat; }
+.jqueryFileTree DIV.expanded_directory_icon { background: url(images/folder_open.png) left top no-repeat; }
+
 .jqueryFileTree DIV.file { background: url(images/file.png) left top no-repeat; }
 .jqueryFileTree LI.wait { background: url(images/spinner.gif) left top no-repeat; }
 /* File Extensions*/

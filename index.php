@@ -20,12 +20,16 @@ require_once("config.php");
 
 <div class="resource_manager">
     <h1>Report List</h1>
+    <p>Each report has it's own directory. Click the view icon to view the report or open the directory and click it.</p>
     <div class="resource_tree" id="report_tree"></div>
     <script>
         $(document).ready( function() {
             displayResourceTree('report_tree', '/Reports/');
         });
     </script>
+    <div class="add_report">
+        Add a report named <input type="text" id="newReportName" /><img src="images/22x22-list-add-5.png" alt="Add a list" onclick="addReport();">
+    </div>
 </div>
 
 
@@ -45,6 +49,17 @@ require_once("config.php");
 </div>
 
 <script>
+    function addReport() {
+        $.post( "resources.php", { action: 'addReport', name: $('#newReportName').val()}, function( data ) {
+            $('#newReportName').val('');
+            displayResourceTree('report_tree', '/Reports/');
+            // The response will have any related error messages.
+            if(data.length) {
+                alert(data);
+            }
+        })
+    }
+
     function displayResourceTree(id, root)
     {
         $('#' + id).fileTree({ root: root, script: 'resources.php', expandSpeed: 150, collapseSpeed: 150 }, function(file) {
@@ -93,13 +108,14 @@ require_once("config.php");
         });
 
         // Add tools to each line of files
-
-        $('#'+ t).find('.file_tools').append('<img class=\"delete_file\" src="./images/edit-delete-2.png" alt=\"Delete File\"/>');
-        $('#'+ t).find('.delete_file').click(function() {
-            var filename = $(this).parent().parent().find("a").attr('rel');
-            var msg = "Are you sure you want to delete " + filename + '?';
+        $('#'+ t).find('.file_tools').append('<img class=\"delete_resource\" src="./images/edit-delete-2.png" alt=\"Delete File\"/>');
+        // The following line is not working
+        $('#'+ t).find('.report_directory_tools').append('<img class=\"delete_resource\" src="./images/edit-delete-2.png" alt=\"Delete File\"/>');
+        $('#'+ t).find('.delete_resource').click(function() {
+            var resourceName = $(this).parent().parent().find("a").attr('rel');
+            var msg = "Are you sure you want to delete " + resourceName + '?';
             if (confirm(msg)) {
-                $.post( "resources.php", { action: 'delete', file: filename}, function( data ) {
+                $.post( "resources.php", { action: 'delete', file: resourceName}, function( data ) {
                     // Adding a confirmation here would be nice when we have a global messasge div.
                     refreshFolder(t);
                 })
