@@ -129,7 +129,10 @@ require_once("config.php");
         });
         $('#'+ t).find('.view_report').click(function() {
             var resourceName = $(this).parent().parent().find("a").attr('rel');
-            document.location='view.php?report=' + encodeURIComponent(resourceName);
+            window.open(
+                'view.php?report=' + encodeURIComponent(resourceName),
+                '_blank' // <- This is what makes it open in a new window.
+            );
         });
 
     }
