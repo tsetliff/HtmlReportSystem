@@ -41,7 +41,7 @@ function deleteResource($filename)
 {
     $filePath = RESOURCE_LOCATION . $filename;
     assertFileIsInResources($filePath);
-    if (isReport($filePath)) {
+    if (isReport($filename)) {
         /** if it is known to be a report **/
         // We will at least know it is a directory in the reports directory
         // and you currently can't make sub directories so lets just kill it.

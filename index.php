@@ -129,7 +129,7 @@ require_once("config.php");
         });
         $('#'+ t).find('.view_report').click(function() {
             var resourceName = $(this).parent().parent().find("a").attr('rel');
-            alert('Go view ' + resourceName);
+            document.location='view.php?report=' + encodeURIComponent(resourceName);
         });
 
     }
