@@ -28,7 +28,7 @@ require_once("config.php");
         });
     </script>
     <div class="add_report">
-        Add a report named <input type="text" id="newReportName" /><img src="images/22x22-list-add-5.png" alt="Add a list" onclick="addReport();">
+        Add a blank report named <input type="text" id="newReportName" /><img src="images/22x22-list-add-5.png" alt="Add a list" onclick="addReport();">
     </div>
 </div>
 
@@ -108,9 +108,11 @@ require_once("config.php");
         });
 
         // Add tools to each line of files
-        $('#'+ t).find('.file_tools').append('<img class=\"delete_resource\" src="./images/edit-delete-2.png" alt=\"Delete File\"/>');
+        $('#'+ t).find('.file_tools').append('<img class=\"delete_resource\" src="images/16x16-edit-delete-2.png" alt=\"Delete File\"/>');
         // The following line is not working
-        $('#'+ t).find('.report_directory_tools').append('<img class=\"delete_resource\" src="./images/edit-delete-2.png" alt=\"Delete File\"/>');
+        $('#'+ t).find('.report_directory_tools').append(
+            '<img class=\"delete_resource\" src="images/16x16-edit-delete-2.png" alt=\"Delete File\"/>' +
+            '&nbsp;<img class=\"view_report\" src="images/16x16-go-next.png" alt=\"View Report\"/>');
         $('#'+ t).find('.delete_resource').click(function() {
             var resourceName = $(this).parent().parent().find("a").attr('rel');
             var msg = "Are you sure you want to delete " + resourceName + '?';
@@ -125,6 +127,11 @@ require_once("config.php");
                     });
             }
         });
+        $('#'+ t).find('.view_report').click(function() {
+            var resourceName = $(this).parent().parent().find("a").attr('rel');
+            alert('Go view ' + resourceName);
+        });
+
     }
 
     function refreshFolder(tgt)

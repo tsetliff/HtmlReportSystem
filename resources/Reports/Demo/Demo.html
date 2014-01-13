@@ -1,12 +1,51 @@
 <html>
 <head>
     <title>Demo Report</title>
+    <link href="resources.php/Shared/Styles/Winter.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <script>
     // Data sets
+    var datasets =
+    {
+        name: "Test Data Source 1",
+        value: [
+            {
+                name: "cow",
+                color: "brown"
+            }
+        ]
+    };
 </script>
-<h1>Demo Report</h1>
-Put a table here with data from the data set.<br>
+<div id="page_header">
+
+</div>
+<div id="page_contents">
+    <div class="widget header">
+        <script>
+            // Widget header
+            var options = {
+                roundedBox: true,
+                color: '#99F'
+            };
+            widget.header(options);
+        </script>
+        <h1>Demo Report</h1>
+    </div>
+    <div class="widget repeater">
+        <script>
+            // Widget repeater
+            // Widget header
+            var options = {
+                dataSource: 'Test Data Source 1'
+            };
+            widget.header(options);
+        </script>
+        Put a table here with data from the data set.<br>
+    </div>
+</div>
+<div id="page_footer">
+
+</div>
 </body>
 </html>

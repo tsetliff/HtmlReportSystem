@@ -9,7 +9,7 @@ $action = $_REQUEST['action'];
 if ($action == 'upload') {
     uploadFiles();
 } else if ($action == 'delete') {
-    deleteResorce($_REQUEST['file']);
+    deleteResource($_REQUEST['file']);
 } else if ($action == 'addReport') {
     newReport($_REQUEST['name']);
 } else {
@@ -30,7 +30,6 @@ function newReport($name)
         echo("That name is already in use.  Please choose another.\n");
     }
 
-    error_log($newDirectory);
     mkdir($newDirectory);
 
     if (!file_exists($newDirectory)) {
@@ -38,14 +37,28 @@ function newReport($name)
     }
 }
 
-function deleteResorce($filename)
+function deleteResource($filename)
 {
     $filePath = RESOURCE_LOCATION . $filename;
     assertFileIsInResources($filePath);
-    if (is_dir($filePath)) {
-        rmdir($filePath);
+    if (isReport($filePath)) {
+        /** if it is known to be a report **/
+        // We will at least know it is a directory in the reports directory
+        // and you currently can't make sub directories so lets just kill it.
+        $escapedDir = escapeshellarg($filePath);
+        $cmd = "rm -rf $escapedDir";
+        `$cmd`;
     } else {
         unlink($filePath);
+    }
+}
+
+function isReport($filePath) {
+    try {
+        $Report = new Report($filePath);
+        return true;
+    } catch (Exception $E) {
+        return false;
     }
 }
 
@@ -65,7 +78,6 @@ function assertFileIsInResources($filename)
 
 function uploadFiles()
 {
-    error_log(print_r($_REQUEST, true ));
     require('js/vendor/jQuery-File-Upload-9.5.2/server/php/UploadHandler.php');
     $uploadToResourceDirectory = $_REQUEST['location'];
     $options = array();
