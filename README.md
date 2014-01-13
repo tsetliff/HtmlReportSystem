@@ -1,5 +1,6 @@
 HtmlReportSystem
 ================
+NOTE: This is still in development, don't use it for anything but development.
 
 Easily create reports for use inside your organization.
 
