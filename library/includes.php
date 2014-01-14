@@ -8,3 +8,4 @@ require_once(CLASS_DIRECTORY . "/DataSource.php");
 require_once(CLASS_DIRECTORY . "/DataSource_Csv.php");
 require_once(CLASS_DIRECTORY . "/DataSource_MySQL.php");
 require_once(CLASS_DIRECTORY . "/Report.php");
+require_once(CLASS_DIRECTORY . "/Report_Edit.php");

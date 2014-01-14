@@ -1,19 +1,22 @@
 <?php
 require_once("config.php");
 
-if (!isset($_REQUEST['action'])) {
+// Just so I didn't need to modify this 3rd party code much:
+if (isset($_SERVER['PATH_INFO'])) {
+    getResource();
+} else if (!isset($_REQUEST['action'])) {
     displayBranchInformationForJQueryFileTree();
-    exit;
-}
-$action = $_REQUEST['action'];
-if ($action == 'upload') {
-    uploadFiles();
-} else if ($action == 'delete') {
-    deleteResource($_REQUEST['file']);
-} else if ($action == 'addReport') {
-    newReport($_REQUEST['name']);
 } else {
-    error_log("Called with unknown action $action.");
+    $action = $_REQUEST['action'];
+    if ($action == 'upload') {
+        uploadFiles();
+    } else if ($action == 'delete') {
+        deleteResource($_REQUEST['file']);
+    } else if ($action == 'addReport') {
+        newReport($_REQUEST['name']);
+    } else {
+        error_log("Called with unknown action $action.");
+    }
 }
 
 function newReport($name)
@@ -84,6 +87,15 @@ function uploadFiles()
     $options['upload_dir'] = RESOURCE_LOCATION . $uploadToResourceDirectory;
     $upload_handler = new UploadHandler($options);
 }
+
+function getResource()
+{
+    // Just return the file.
+    $resource = $_SERVER['PATH_INFO'];
+    // Do some acl checks!
+    error_log("At some point fix this so it returns $resource with the proper mime type.");
+}
+
 
 function displayBranchInformationForJQueryFileTree() {
     //

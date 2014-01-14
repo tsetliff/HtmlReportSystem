@@ -111,7 +111,8 @@ require_once("config.php");
         $('#'+ t).find('.file_tools').append('<img class=\"delete_resource\" src="images/16x16-edit-delete-2.png" alt=\"Delete File\"/>');
         // The following line is not working
         $('#'+ t).find('.report_directory_tools').append(
-            '<img class=\"delete_resource\" src="images/16x16-edit-delete-2.png" alt=\"Delete File\"/>' +
+            '<img class=\"delete_resource\" src="images/16x16-edit-delete-2.png" alt=\"Delete Report\"/>' +
+            '<img class=\"edit_report\" src="images/16x16-edit-3.png" alt=\"Edit Report\"/>' +
             '&nbsp;<img class=\"view_report\" src="images/16x16-go-next.png" alt=\"View Report\"/>');
         $('#'+ t).find('.delete_resource').click(function() {
             var resourceName = $(this).parent().parent().find("a").attr('rel');
@@ -127,11 +128,20 @@ require_once("config.php");
                     });
             }
         });
+
         $('#'+ t).find('.view_report').click(function() {
             var resourceName = $(this).parent().parent().find("a").attr('rel');
             window.open(
-                'view.php?report=' + encodeURIComponent(resourceName),
-                '_blank' // <- This is what makes it open in a new window.
+                'report.php?report=' + encodeURIComponent(resourceName),
+                '_blank'
+            );
+        });
+
+        $('#'+ t).find('.edit_report').click(function() {
+            var resourceName = $(this).parent().parent().find("a").attr('rel');
+            window.open(
+                'report.php?action=edit&report=' + encodeURIComponent(resourceName),
+                '_blank'
             );
         });
 
