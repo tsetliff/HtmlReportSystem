@@ -14,6 +14,8 @@ if (isset($_SERVER['PATH_INFO'])) {
         deleteResource($_REQUEST['file']);
     } else if ($action == 'addReport') {
         newReport($_REQUEST['name']);
+    } else if ($action == 'saveFile') {
+        saveFile($_REQUEST['file'], $_REQUEST['content']);
     } else {
         error_log("Called with unknown action $action.");
     }
@@ -21,23 +23,7 @@ if (isset($_SERVER['PATH_INFO'])) {
 
 function newReport($name)
 {
-    // Sanitize name
-    $sanitizedName = preg_replace('/[^a-zA-Z0-9 ]/', '', $name);
-    if ($name !== $sanitizedName) {
-        echo("Report may have had invalid characters.  Currently only alpha numeric characters and spaces are allowed.\n");
-    }
-
-    $newDirectory = RESOURCE_LOCATION . '/Reports/' . $sanitizedName;
-
-    if (file_exists($newDirectory)) {
-        echo("That name is already in use.  Please choose another.\n");
-    }
-
-    mkdir($newDirectory);
-
-    if (!file_exists($newDirectory)) {
-        echo("Error creating directory.  Ask your systems administrator to check the log files.\n");
-    }
+    Report::create($name);
 }
 
 function deleteResource($filename)
@@ -74,6 +60,7 @@ function isReport($filePath) {
 function assertFileIsInResources($filename)
 {
     if (!$filename == realpath($filename)) {
+        echo("File name issue, please try again.");
         error_log("The real path of $filename didn't match, check for file trickery.");
         exit;
     }
@@ -85,7 +72,8 @@ function uploadFiles()
     $uploadToResourceDirectory = $_REQUEST['location'];
     $options = array();
     $options['upload_dir'] = RESOURCE_LOCATION . $uploadToResourceDirectory;
-    $upload_handler = new UploadHandler($options);
+    // Simply making an instance puts it to work
+    new UploadHandler($options);
 }
 
 function getResource()
@@ -96,6 +84,16 @@ function getResource()
     error_log("At some point fix this so it returns $resource with the proper mime type.");
 }
 
+function saveFile($file, $content)
+{
+    $dest = RESOURCE_LOCATION . $file;
+    assertFileIsInResources($dest);
+    $result = file_put_contents($dest, $content);
+    if ($result === false) {
+        echo("Failed to write file, as your sys-admin to consult the server log for details.");
+    }
+    echo("Saved.");
+}
 
 function displayBranchInformationForJQueryFileTree() {
     //

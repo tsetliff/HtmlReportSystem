@@ -3,14 +3,43 @@ class Report_Edit extends Report
 {
     public function render()
     {
-        // Put things in terms of tags that work in the WYSIWYG editor.
-        // Add widget sidebar, menu with editing options.
-        // Return options such as selected style sheet in json as well.
-        parent::render();
-        echo("<html><head><script src=\"js/vendor/nicEdit/nicEdit.js\"></script></head><body>
-        <script type=\"text/javascript\">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
-        <textarea>");
-        echo(htmlspecialchars(file_get_contents($this->_filePath . 'Demo.html')));
-        echo("</textarea></body></html>");
+        $document = $this->renderHeader();
+        $document .= $this->addEditorStart();
+        $document .= htmlspecialchars(file_get_contents($this->_filePath . $this->getFileName()));
+        $document .= $this->addEditorEnd();
+        $document .= $this->renderFooter();
+        return $document;
+    }
+
+    private function addEditorStart()
+    {
+        return <<< EOT
+            <textarea id="report_editor" style="width: 100%; height:80%">
+EOT;
+    }
+
+    private function addEditorEnd()
+    {
+        $fullPathToFile = $this->_resourcePath . $this->getFileName();
+        return <<< EOT
+</textarea>
+            <script type="text/javascript">
+                bkLib.onDomLoaded(function() {
+                    new nicEditor({
+                        onSave: function(content, id, instance) {
+                            $.post( "resources.php", { action: 'saveFile', file: '$fullPathToFile', content: content}, function( data ) {
+                                // The response will have any related error messages.
+                                if(data.length) {
+                                    alert(data);
+                                }
+                            })
+                        },
+                        fullPanel: true,
+                        iconsPath: 'js/vendor/nicEdit/nicEditorIcons.gif'
+                    }).panelInstance('report_editor');
+                });
+            </script>
+EOT;
+
     }
 } 
